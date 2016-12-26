@@ -24,8 +24,8 @@ const int Building::FLOORS = sizeof(floors) / sizeof(Floor);
 Elevator Building::elevators[] =
 {
   Elevator(12, 5, 0),
-  Elevator(12, 5, 0),
-  Elevator(12, 5, 0)
+  Elevator(12, 5, 1),
+  Elevator(12, 5, 2)
 };
 const int Building::ELEVATORS = sizeof(elevators) / sizeof(Elevator);
 
@@ -73,8 +73,41 @@ bool Building::openDoorToDisembarkRider(int e)
           return true;
         }
   return false;
-
 }
+
+bool Building::disembarkRider(int e) // lab 9
+{
+  // if open and rider to disembark, do that
+  if (elevators[e].isOpen() && elevators[e].hasRiderForFloor())
+  {
+    elevators[e].removeRider();
+    return true;
+  }
+  return false;
+}
+
+bool Building::boardRider(int e) // lab 9
+{ 
+  // if door is open and not full and rider to load, load
+  if (elevators[e].isOpen() && !elevators[e].isFull())
+  {
+    Floor& floor = floors[elevators[e].getFloorIndex()];
+    if (elevators[e].goingUp() && floor.hasUpRider())
+    {
+      Rider rider = floor.removeUpRider();
+      elevators[e].board(rider);
+      return true;
+    }
+    else if (elevators[e].goingDown() && floor.hasDownRider())
+    {
+      Rider rider = floor.removeDownRider();
+      elevators[e].board(rider);
+      return true;
+    }
+  }
+  return false;
+}
+
 
 void Building::action(double arrivalsPerSecond)
 {
@@ -84,8 +117,8 @@ void Building::action(double arrivalsPerSecond)
   for (int e = 0; e < ELEVATORS; e++)
   {
     if (openDoorToDisembarkRider(e)) continue; // lab 8
-    //if (disembarkRider(e)) continue; // lab 9
-    //if (boardRider(e)) continue; // lab 9
+    if (disembarkRider(e)) continue; // lab 9
+    if (boardRider(e)) continue; // lab 9
     //if (waitingForMoreRiders(e)) continue; // lab 12
     //if (doneWaitingMove(e)) continue; // lab 12
     //if (moveableMove(e)) continue; // lab 14

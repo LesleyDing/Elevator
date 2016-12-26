@@ -4,13 +4,14 @@
 #ifndef FLOOR_H
 #define FLOOR_H
 
-#include <string>
-#include <queue>
-#include <iostream>
-using namespace std;
-
 #include "Panel.h"
 #include "Rider.h"
+#include "Building.h"
+
+#include <iostream>
+#include <string>
+#include <queue>
+using namespace std;
 
 class Floor
 {
@@ -32,6 +33,10 @@ class Floor
   bool hasUpRider() const;
   bool hasDownRider() const;
   void addRider(const Rider&);
+
+  // added in lab 9
+  Rider removeUpRider();
+  Rider removeDownRider();
 
   // for external reporting
   friend ostream& operator<<(ostream&, const Floor&); // say name, location, #'s of up/down riders waiting

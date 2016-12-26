@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
+#include <ostream>
 using namespace std;
 
 #include "Panel.h"

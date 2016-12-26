@@ -1,8 +1,13 @@
 //Programmer name: Hanzhi Ding
 //Programmer's ID: 1466750
 
+#include "Building.h"
+
 #ifndef Rider_H
 #define Rider_H
+
+#include <string>
+using namespace std;
 
 struct Rider
 {

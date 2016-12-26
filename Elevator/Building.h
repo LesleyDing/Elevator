@@ -21,8 +21,8 @@ struct Building
   // actions
   static void placeNewRiders(double);
   static bool openDoorToDisembarkRider(int);
-  //static bool disembarkRider(int); // lab 9
-  //static bool boardRider(int); // lab 9
+  static bool disembarkRider(int); // lab 9
+  static bool boardRider(int); // lab 9
   //static bool waitingForMoreRiders(int); // lab 12
   //static bool doneWaitingMove(int); // lab 12
   //static bool moveableMove(int); // lab 14

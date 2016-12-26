@@ -4,6 +4,9 @@
 #include "Rider.h"
 #include "Building.h"
 
+#include <string>
+using namespace std;
+
 Rider::Rider(const int f, const int t)
 : from(f), to(t),
   goingUp(Building::floors[from] < Building::floors[to] ? true : false),

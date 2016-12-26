@@ -1,17 +1,17 @@
 //Programmer name: Hanzhi Ding
 //Programmer's ID: 1466750
 
-#include <iostream>
-#include <vector>
-#include <string>
-using namespace std;
-
-#include <climits>
-
 #include "Panel.h"
 #include "Rider.h"
 #include "Floor.h"
 #include "Building.h"
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <climits>
 
 const char* const Floor::UP = "Up";
 const char* const Floor::DOWN = "Down";
@@ -47,9 +47,33 @@ void Floor::addRider(const Rider& r)
   if (r.goingDown)
   {  
     downRiders.push(r);
-	if (!panel.isLit(DOWN)) 
+	if (!panel.isLit(DOWN))
       panel.press(DOWN);
   }
+}
+
+Rider Floor::removeUpRider()
+{
+  // throw an exception if the queue is empty
+  if (upRiders.empty()) throw "no up riders!";
+  // make a local copy of the rider at the front of the up-rider queue  
+  Rider boardedRider = upRiders.front();
+  // pop the rider at the front of the up-rider queue
+  upRiders.pop();
+  // return the local copy
+  return boardedRider;
+}
+
+Rider Floor::removeDownRider()
+{
+  // throw an exception if the queue is empty
+  if (downRiders.empty()) throw "no down riders!";
+  // make a local copy of the rider at the front of the up-rider queue  
+  Rider boardedRider = downRiders.front();
+  // pop the rider at the front of the up-rider queue
+  downRiders.pop();
+  // return the local copy
+  return boardedRider;
 }
 
 ostream& operator<<(ostream& out, const Floor& floor)

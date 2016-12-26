@@ -4,12 +4,16 @@
 #ifndef ELEVATOR_H
 #define ELEVATOR_H
 
-#include <vector>
-using namespace std;
-
 #include "Panel.h"
 #include "Rider.h"
 #include "Floor.h"
+#include "Building.h"
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream> 
+using namespace std;
 
 class Elevator
 {
@@ -39,6 +43,14 @@ class Elevator
   bool isOpen() const {return atFloorIndex >= 0;}
   void openDoorTo(int); // parameter is index in Building::floors array
   void board(const Rider&); // adds a Rider to the Elevator
+
+  // added in lab 9
+  bool hasRiderForFloor() const;
+  void removeRider();
+  bool isFull() const {return CAPACITY == riders.size();}
+  bool goingUp() const {return direction == UP;}
+  bool goingDown() const {return direction == DOWN;}
+  int getFloorIndex() const {return atFloorIndex;}
 
   Panel panel;
   

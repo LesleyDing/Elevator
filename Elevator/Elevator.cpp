@@ -1,16 +1,17 @@
 //Programmer name: Hanzhi Ding
 //Programmer's ID: 1466750
 
-#include <iostream>
-#include <vector>
-using namespace std;
-
-#include <cstdlib>
-
 #include "Panel.h"
 #include "Rider.h"
 #include "Building.h"
 #include "Elevator.h"
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+#include <cstdlib>
 
 Elevator::Elevator(unsigned int capacity, int speed, int start)
 :speed(speed), CAPACITY(capacity), direction(IDLE), timer(0)
@@ -21,11 +22,11 @@ Elevator::Elevator(unsigned int capacity, int speed, int start)
   location = Building::floors[start].elevation;
 }
 
-void Elevator::openDoorTo(int index)
+void Elevator::openDoorTo(int f)
 {
-  panel.clear(Building::floors[index].label); // clear the host elevator's panel button for the referenced floor (so its light goes out)
-  atFloorIndex = index; // set atFloorIndex to the referenced floor's index
-  location = Building::floors[index].elevation; // set location to the referenced floor's elevation
+  panel.clear(Building::floors[f].label); // clear the host elevator's panel button for the referenced floor (so its light goes out)
+  atFloorIndex = f; // set atFloorIndex to the referenced floor's index
+  location = Building::floors[f].elevation; // set location to the referenced floor's elevation
   resetTimer(); // reset the host elevator's count-down timer
 }
 
@@ -49,16 +50,43 @@ void Elevator::board(const Rider& r)
   resetTimer(); // reset the host elevator's count-down timer
 }
 
+bool Elevator::hasRiderForFloor() const
+{
+  // if the door is not open, return false
+  if (!isOpen())
+    return false;
+  
+  for(unsigned int i = 0; i < riders.size(); i++) // traverse the host elevator's vector of riders
+    if (riders[i].to == atFloorIndex) // if a rider's destination equals the elevator's current floor
+      return true;
+  
+  return false; //if the end of the traversal loop is reached
+}
+
+void Elevator::removeRider()
+{
+  // traverse the host elevator's vector of riders
+  // if a rider's destination (.to member) equals the elevator's current floor (atFloorIndex member)
+  for(unsigned int i = 0; i < riders.size(); i++)
+    if (riders[i].to == atFloorIndex)
+    {
+      riders.erase(riders.begin() + i); // erase that rider
+      panel.clear(Building::floors[atFloorIndex].label); // clear the host elevator's panel button for the current floor
+      resetTimer(); // reset the host elevator's count-down timer
+      break; // break from the loop (so that no more riders are erased)
+    }
+}
+
 ostream& operator<<(ostream& out, const Elevator& elevator) 
 {
   out.setf(ios::left);
-  out.width(10);
+  out.width(14);
   out << "Elevator at";
-  out.unsetf(ios::left); 
+  out.unsetf(ios::left);
   out.setf(ios::right);
   out.width(5);
   out << elevator.location;
-  out.width(13);
+  out.width(15);
   if(elevator.direction == Elevator::IDLE)
 	  out << "IDLE";
   if(elevator.direction == Elevator::UP)
